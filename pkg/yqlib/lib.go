@@ -430,10 +430,6 @@ func (p *Operation) toString() string {
 
 // use for debugging only
 func NodesToString(collection *list.List) string {
-	if !log.IsEnabledFor(logging.DEBUG) {
-		return ""
-	}
-
 	return ""
 	result := fmt.Sprintf("%v results\n", collection.Len())
 	for el := collection.Front(); el != nil; el = el.Next() {
