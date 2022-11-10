@@ -20,7 +20,7 @@ func NewCSVObjectDecoder(separator rune) Decoder {
 }
 
 func (dec *csvObjectDecoder) Init(reader io.Reader) error {
-	cleanReader, enc := utfbom.Skip(reader)
+	cleanReader, _ := utfbom.Skip(reader)
 	dec.reader = *csv.NewReader(cleanReader)
 	dec.reader.Comma = dec.separator
 	dec.finished = false

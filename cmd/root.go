@@ -43,12 +43,6 @@ yq -P sample.json
 				return err
 			}
 
-			inputFormatType, err := yqlib.InputFormatFromString(inputFormat)
-
-			if err != nil {
-				return err
-			}
-
 			if outputFormatType == yqlib.YamlOutputFormat ||
 				outputFormatType == yqlib.PropsOutputFormat {
 				unwrapScalar = true
