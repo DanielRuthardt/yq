@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/copier"
-	logging "gopkg.in/op/go-logging.v1"
 	"gopkg.in/yaml.v3"
 )
 
@@ -99,9 +98,6 @@ func resultsForRHS(d *dataTreeNavigator, context Context, lhsCandidate *Candidat
 
 	for rightEl := rhs.MatchingNodes.Front(); rightEl != nil; rightEl = rightEl.Next() {
 		rhsCandidate := rightEl.Value.(*CandidateNode)
-		if !log.IsEnabledFor(logging.DEBUG) {
-			log.Debugf("Applying lhs: %v, rhsCandidate, %v", NodeToString(lhsCandidate), NodeToString(rhsCandidate))
-		}
 		resultCandidate, err := prefs.Calculation(d, context, lhsCandidate, rhsCandidate)
 		if err != nil {
 			return err
@@ -127,7 +123,6 @@ func doCrossFunc(d *dataTreeNavigator, context Context, expressionNode *Expressi
 	if err != nil {
 		return Context{}, err
 	}
-	log.Debugf("crossFunction LHS len: %v", lhs.MatchingNodes.Len())
 
 	if prefs.CalcWhenEmpty && lhs.MatchingNodes.Len() == 0 {
 		err := resultsForRHS(d, context, nil, prefs, expressionNode.RHS, results)
@@ -165,11 +160,8 @@ func crossFunctionWithPrefs(d *dataTreeNavigator, context Context, expressionNod
 	}
 
 	if evaluateAllTogether {
-		log.Debug("crossFunction evaluateAllTogether!")
 		return doCrossFunc(d, context, expressionNode, prefs)
 	}
-
-	log.Debug("crossFunction evaluate apart!")
 
 	for matchEl := context.MatchingNodes.Front(); matchEl != nil; matchEl = matchEl.Next() {
 		innerResults, err := doCrossFunc(d, context.SingleChildContext(matchEl.Value.(*CandidateNode)), expressionNode, prefs)

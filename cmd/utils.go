@@ -7,7 +7,6 @@ import (
 
 	"github.com/mikefarah/yq/v4/pkg/yqlib"
 	"github.com/spf13/cobra"
-	"gopkg.in/op/go-logging.v1"
 )
 
 func initCommand(cmd *cobra.Command, args []string) (string, []string, error) {
@@ -119,17 +118,8 @@ func configureEncoder(format yqlib.PrinterOutputFormat) yqlib.Encoder {
 // without this - yq detects there is stdin (thanks githubactions),
 // then tries to parse the filename as an expression
 func maybeFile(str string) bool {
-	yqlib.GetLogger().Debugf("checking '%v' is a file", str)
 	stat, err := os.Stat(str) // #nosec
 	result := err == nil && !stat.IsDir()
-	if yqlib.GetLogger().IsEnabledFor(logging.DEBUG) {
-		if err != nil {
-			yqlib.GetLogger().Debugf("error: %v", err)
-		} else {
-			yqlib.GetLogger().Debugf("error: %v, dir: %v", err, stat.IsDir())
-		}
-		yqlib.GetLogger().Debugf("result: %v", result)
-	}
 	return result
 }
 
@@ -150,7 +140,6 @@ func processStdInArgs(args []string) []string {
 			return args
 		}
 	}
-	yqlib.GetLogger().Debugf("missing '-', adding it to the end")
 
 	// we're piping from stdin, but there's no '-' arg
 	// lets add one to the end
@@ -168,9 +157,7 @@ func processArgs(originalArgs []string) (string, []string, error) {
 	}
 
 	args := processStdInArgs(originalArgs)
-	yqlib.GetLogger().Debugf("processed args: %v", args)
 	if expression == "" && len(args) > 0 && args[0] != "-" && !maybeFile(args[0]) {
-		yqlib.GetLogger().Debug("assuming expression is '%v'", args[0])
 		expression = args[0]
 		args = args[1:]
 	}

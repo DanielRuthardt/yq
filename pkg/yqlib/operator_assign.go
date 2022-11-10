@@ -38,7 +38,6 @@ func assignUpdateOperator(d *dataTreeNavigator, context Context, expressionNode 
 
 	prefs := getAssignPreferences(expressionNode.Operation.Preferences)
 
-	log.Debug("assignUpdateOperator prefs: %v", prefs)
 
 	if !expressionNode.Operation.UpdateAssign {
 		// this works because we already ran against LHS with an editable context.
@@ -70,7 +69,6 @@ func assignUpdateOperator(d *dataTreeNavigator, context Context, expressionNode 
 
 // does not update content or values
 func assignAttributesOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debug("getting lhs matching nodes for update")
 	lhs, err := d.GetMatchingNodes(context, expressionNode.LHS)
 	if err != nil {
 		return Context{}, err

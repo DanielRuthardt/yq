@@ -18,7 +18,6 @@ import (
 */
 
 func collectObjectOperator(d *dataTreeNavigator, originalContext Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("-- collectObjectOperation")
 
 	context := originalContext.WritableClone()
 

@@ -39,7 +39,6 @@ func processIntoGroups(d *dataTreeNavigator, context Context, rhsExp *Expression
 
 func groupBy(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
 
-	log.Debugf("-- groupBy Operator")
 	var results = list.New()
 
 	for el := context.MatchingNodes.Front(); el != nil; el = el.Next() {

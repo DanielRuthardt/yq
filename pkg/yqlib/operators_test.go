@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/mikefarah/yq/v4/test"
-	logging "gopkg.in/op/go-logging.v1"
 	yaml "gopkg.in/yaml.v3"
 )
 
@@ -31,7 +30,6 @@ type expressionScenario struct {
 }
 
 func TestMain(m *testing.M) {
-	logging.SetLevel(logging.ERROR, "")
 	Now = func() time.Time {
 		return time.Date(2021, time.May, 19, 1, 2, 3, 4, time.UTC)
 	}

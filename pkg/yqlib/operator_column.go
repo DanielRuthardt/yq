@@ -8,7 +8,6 @@ import (
 )
 
 func columnOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("columnOperator")
 
 	var results = list.New()
 

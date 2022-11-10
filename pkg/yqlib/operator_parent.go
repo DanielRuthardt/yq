@@ -3,7 +3,6 @@ package yqlib
 import "container/list"
 
 func getParentOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("-- getParentOperator")
 
 	var results = list.New()
 

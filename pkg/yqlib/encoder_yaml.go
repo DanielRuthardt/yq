@@ -29,7 +29,6 @@ func (ye *yamlEncoder) CanHandleAliases() bool {
 
 func (ye *yamlEncoder) PrintDocumentSeparator(writer io.Writer) error {
 	if ye.prefs.PrintDocSeparators {
-		log.Debug("-- writing doc sep")
 		if err := writeString(writer, "---\n"); err != nil {
 			return err
 		}
@@ -38,7 +37,6 @@ func (ye *yamlEncoder) PrintDocumentSeparator(writer io.Writer) error {
 }
 
 func (ye *yamlEncoder) PrintLeadingContent(writer io.Writer, content string) error {
-	// log.Debug("headcommentwas [%v]", content)
 	reader := bufio.NewReader(strings.NewReader(content))
 
 	for {

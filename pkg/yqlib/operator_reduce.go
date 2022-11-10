@@ -6,7 +6,6 @@ import (
 )
 
 func reduceOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("-- reduceOp")
 	//.a as $var reduce (0; . + $var)
 	//lhs is the assignment operator
 	//rhs is the reduce block
@@ -37,12 +36,10 @@ func reduceOperator(d *dataTreeNavigator, context Context, expressionNode *Expre
 		return Context{}, err
 	}
 
-	log.Debugf("with variable %v", variableName)
 
 	blockExp := expressionNode.RHS.RHS
 	for el := array.MatchingNodes.Front(); el != nil; el = el.Next() {
 		candidate := el.Value.(*CandidateNode)
-		log.Debugf("REDUCING WITH %v", NodeToString(candidate))
 		l := list.New()
 		l.PushBack(candidate)
 		accum.SetVariable(variableName, l)

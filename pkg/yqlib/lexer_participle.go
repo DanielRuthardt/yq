@@ -259,7 +259,6 @@ func pathToken(wrapped bool) yqAction {
 		if wrapped {
 			value = unwrap(value)
 		}
-		log.Debug("PathToken %v", value)
 		op := &Operation{OperationType: traversePathOpType, Value: value, StringValue: value, Preferences: prefs}
 		return &token{TokenType: operationToken, Operation: op, CheckForPostTraverse: true}, nil
 	}
@@ -312,7 +311,6 @@ func flattenWithDepth() yqAction {
 
 func assignAllCommentsOp(updateAssign bool) yqAction {
 	return func(rawToken lexer.Token) (*token, error) {
-		log.Debug("assignAllCommentsOp %v", rawToken.Value)
 		value := rawToken.Value
 		op := &Operation{
 			OperationType: assignCommentOpType,
@@ -327,7 +325,6 @@ func assignAllCommentsOp(updateAssign bool) yqAction {
 
 func assignOpToken(updateAssign bool) yqAction {
 	return func(rawToken lexer.Token) (*token, error) {
-		log.Debug("assignOpToken %v", rawToken.Value)
 		value := rawToken.Value
 		prefs := assignPreferences{DontOverWriteAnchor: true}
 		if strings.Contains(value, "c") {
@@ -444,7 +441,6 @@ func hexValue() yqAction {
 	return func(rawToken lexer.Token) (*token, error) {
 		var originalString = rawToken.Value
 		var numberString = originalString[2:]
-		log.Debugf("numberString: %v", numberString)
 		var number, errParsingInt = strconv.ParseInt(numberString, 16, 64)
 		if errParsingInt != nil {
 			return nil, errParsingInt

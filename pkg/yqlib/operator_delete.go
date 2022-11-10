@@ -25,14 +25,12 @@ func deleteChildOperator(d *dataTreeNavigator, context Context, expressionNode *
 				if nodeInContext.Node != candidate.Node {
 					newResults.PushBack(nodeInContext)
 				} else {
-					log.Info("Need to delete this %v", NodeToString(nodeInContext))
 				}
 			}
 			return context.ChildContext(newResults), nil
 		} else if candidate.Parent == nil {
 			//problem: context may already be '.a' and then I pass in '.a.a2'.
 			// should pass in .a2.
-			log.Info("Could not find parent of %v", NodeToString(candidate))
 			return context, nil
 		}
 
@@ -51,7 +49,6 @@ func deleteChildOperator(d *dataTreeNavigator, context Context, expressionNode *
 }
 
 func deleteFromMap(candidate *CandidateNode, childPath interface{}) {
-	log.Debug("deleteFromMap")
 	node := unwrapDoc(candidate.Node)
 	contents := node.Content
 	newContents := make([]*yaml.Node, 0)
@@ -60,11 +57,9 @@ func deleteFromMap(candidate *CandidateNode, childPath interface{}) {
 		key := contents[index]
 		value := contents[index+1]
 
-		childCandidate := candidate.CreateChildInMap(key, value)
 
 		shouldDelete := key.Value == childPath
 
-		log.Debugf("shouldDelete %v ? %v", childCandidate.GetKey(), shouldDelete)
 
 		if !shouldDelete {
 			newContents = append(newContents, key, value)
@@ -74,7 +69,6 @@ func deleteFromMap(candidate *CandidateNode, childPath interface{}) {
 }
 
 func deleteFromArray(candidate *CandidateNode, childPath interface{}) {
-	log.Debug("deleteFromArray")
 	node := unwrapDoc(candidate.Node)
 	contents := node.Content
 	newContents := make([]*yaml.Node, 0)

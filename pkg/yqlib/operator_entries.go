@@ -151,8 +151,6 @@ func withEntriesOperator(d *dataTreeNavigator, context Context, expressionNode *
 		}
 
 		result, err := d.GetMatchingNodes(splatted, expressionNode.RHS)
-		log.Debug("expressionNode.Rhs %v", expressionNode.RHS.Operation.OperationType)
-		log.Debug("result %v", result)
 		if err != nil {
 			return Context{}, err
 		}
@@ -165,7 +163,6 @@ func withEntriesOperator(d *dataTreeNavigator, context Context, expressionNode *
 		collected.LeadingContent = candidate.LeadingContent
 		collected.TrailingContent = candidate.TrailingContent
 
-		log.Debugf("**** collected %v", collected.LeadingContent)
 
 		fromEntries, err := fromEntriesOperator(d, context.SingleChildContext(collected), expressionNode)
 		if err != nil {

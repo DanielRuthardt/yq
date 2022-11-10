@@ -53,7 +53,6 @@ func (dec *xmlDecoder) processComment(c string) string {
 }
 
 func (dec *xmlDecoder) createMap(n *xmlNode) (*yaml.Node, error) {
-	log.Debug("createMap: headC: %v, footC: %v", n.HeadComment, n.FootComment)
 	yamlNode := &yaml.Node{Kind: yaml.MappingNode, Tag: "!!map"}
 
 	if len(n.Data) > 0 {
@@ -78,7 +77,6 @@ func (dec *xmlDecoder) createMap(n *xmlNode) (*yaml.Node, error) {
 
 		labelNode.FootComment = dec.processComment(keyValuePair.FootComment)
 
-		log.Debug("len of children in %v is %v", label, len(children))
 		if len(children) > 1 {
 			valueNode, err = dec.createSequence(children)
 			if err != nil {
@@ -111,7 +109,6 @@ func (dec *xmlDecoder) convertToYamlNode(n *xmlNode) (*yaml.Node, error) {
 	if n.Data == "" {
 		scalar = createScalarNode(nil, "")
 	}
-	log.Debug("scalar headC: %v, footC: %v", n.HeadComment, n.FootComment)
 	scalar.HeadComment = dec.processComment(n.HeadComment)
 	scalar.LineComment = dec.processComment(n.LineComment)
 	scalar.FootComment = dec.processComment(n.FootComment)
@@ -171,17 +168,13 @@ func (n *xmlNode) AddChild(s string, c *xmlNode) {
 	if n.Children == nil {
 		n.Children = make([]*xmlChildrenKv, 0)
 	}
-	log.Debug("looking for %s", s)
 	// see if we can find an existing entry to add to
 	for _, childEntry := range n.Children {
 		if childEntry.K == s {
-			log.Debug("found it, appending an entry%s", s)
 			childEntry.V = append(childEntry.V, c)
-			log.Debug("yay len of children in %v is %v", s, len(childEntry.V))
 			return
 		}
 	}
-	log.Debug("not there, making a new one %s", s)
 	n.Children = append(n.Children, &xmlChildrenKv{K: s, V: []*xmlNode{c}})
 }
 
@@ -225,7 +218,6 @@ func (dec *xmlDecoder) decodeXML(root *xmlNode) error {
 
 		switch se := t.(type) {
 		case xml.StartElement:
-			log.Debug("start element %v", se.Name.Local)
 			elem.state = "started"
 			// Build new a new current element and link it to its parent
 			elem = &element{
@@ -248,10 +240,8 @@ func (dec *xmlDecoder) decodeXML(root *xmlNode) error {
 			elem.n.Data = trimNonGraphic(string(se))
 			if elem.n.Data != "" {
 				elem.state = "chardata"
-				log.Debug("chardata [%v] for %v", elem.n.Data, elem.label)
 			}
 		case xml.EndElement:
-			log.Debug("end element %v", elem.label)
 			elem.state = "finished"
 			// And add it to its parent list
 			if elem.parent != nil {
@@ -267,10 +257,8 @@ func (dec *xmlDecoder) decodeXML(root *xmlNode) error {
 				applyFootComment(elem, commentStr)
 
 			} else if elem.state == "chardata" {
-				log.Debug("got a line comment for (%v) %v: [%v]", elem.state, elem.label, commentStr)
 				elem.n.LineComment = joinFilter([]string{elem.n.LineComment, commentStr})
 			} else {
-				log.Debug("got a head comment for (%v) %v: [%v]", elem.state, elem.label, commentStr)
 				elem.n.HeadComment = joinFilter([]string{elem.n.HeadComment, commentStr})
 			}
 
@@ -294,10 +282,8 @@ func applyFootComment(elem *element, commentStr string) {
 	if len(elem.n.Children) > 0 {
 		lastChildIndex := len(elem.n.Children) - 1
 		childKv := elem.n.Children[lastChildIndex]
-		log.Debug("got a foot comment for %v: [%v]", childKv.K, commentStr)
 		childKv.FootComment = joinFilter([]string{elem.n.FootComment, commentStr})
 	} else {
-		log.Debug("got a foot comment for %v: [%v]", elem.label, commentStr)
 		elem.n.FootComment = joinFilter([]string{elem.n.FootComment, commentStr})
 	}
 }

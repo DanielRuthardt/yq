@@ -7,7 +7,6 @@ import (
 
 func getVariableOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
 	variableName := expressionNode.Operation.StringValue
-	log.Debug("getVariableOperator %v", variableName)
 	result := context.GetVariable(variableName)
 	if result == nil {
 		result = list.New()

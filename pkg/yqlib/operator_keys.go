@@ -8,7 +8,6 @@ import (
 )
 
 func isKeyOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("-- isKeyOperator")
 
 	var results = list.New()
 
@@ -22,7 +21,6 @@ func isKeyOperator(d *dataTreeNavigator, context Context, expressionNode *Expres
 }
 
 func getKeyOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("-- getKeyOperator")
 
 	var results = list.New()
 
@@ -39,7 +37,6 @@ func getKeyOperator(d *dataTreeNavigator, context Context, expressionNode *Expre
 }
 
 func keysOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("-- keysOperator")
 
 	var results = list.New()
 

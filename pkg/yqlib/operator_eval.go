@@ -5,7 +5,6 @@ import (
 )
 
 func evalOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("Eval")
 	pathExpStrResults, err := d.GetMatchingNodes(context.ReadOnlyClone(), expressionNode.RHS)
 	if err != nil {
 		return Context{}, err

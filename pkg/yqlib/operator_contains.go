@@ -47,17 +47,13 @@ func containsObject(lhs *yaml.Node, rhs *yaml.Node) (bool, error) {
 	for index := 0; index < len(rhs.Content); index = index + 2 {
 		rhsKey := rhs.Content[index]
 		rhsValue := rhs.Content[index+1]
-		log.Debugf("Looking for %v in the lhs", rhsKey.Value)
 		lhsKeyIndex := findInArray(lhs, rhsKey)
-		log.Debugf("index is %v", lhsKeyIndex)
 		if lhsKeyIndex < 0 || lhsKeyIndex%2 != 0 {
 			return false, nil
 		}
 		lhsValue := lhs.Content[lhsKeyIndex+1]
-		log.Debugf("lhsValue is %v", lhsValue.Value)
 
 		itemInArray, err := contains(lhsValue, rhsValue)
-		log.Debugf("rhsValue is %v", rhsValue.Value)
 		if err != nil {
 			return false, err
 		}

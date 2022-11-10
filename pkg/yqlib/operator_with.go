@@ -3,7 +3,6 @@ package yqlib
 import "fmt"
 
 func withOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("-- withOperator")
 	// with(path, exp)
 
 	if expressionNode.RHS.Operation.OperationType != blockOpType {

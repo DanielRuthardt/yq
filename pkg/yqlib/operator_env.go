@@ -19,7 +19,6 @@ type envOpPreferences struct {
 
 func envOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
 	envName := expressionNode.Operation.CandidateNode.Node.Value
-	log.Debug("EnvOperator, env name:", envName)
 
 	rawValue := os.Getenv(envName)
 
@@ -44,9 +43,6 @@ func envOperator(d *dataTreeNavigator, context Context, expressionNode *Expressi
 		//first node is a doc
 		node = unwrapDoc(&dataBucket)
 	}
-	log.Debug("ENV tag", node.Tag)
-	log.Debug("ENV value", node.Value)
-	log.Debug("ENV Kind", node.Kind)
 
 	target := &CandidateNode{Node: node}
 
@@ -73,7 +69,6 @@ func envsubstOperator(d *dataTreeNavigator, context Context, expressionNode *Exp
 		candidate := el.Value.(*CandidateNode)
 		node := unwrapDoc(candidate.Node)
 		if node.Tag != "!!str" {
-			log.Warning("EnvSubstOperator, env name:", node.Tag, node.Value)
 			return Context{}, fmt.Errorf("cannot substitute with %v, can only substitute strings. Hint: Most often you'll want to use '|=' over '=' for this operation", node.Tag)
 		}
 

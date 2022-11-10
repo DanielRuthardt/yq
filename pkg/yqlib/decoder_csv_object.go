@@ -21,7 +21,6 @@ func NewCSVObjectDecoder(separator rune) Decoder {
 
 func (dec *csvObjectDecoder) Init(reader io.Reader) error {
 	cleanReader, enc := utfbom.Skip(reader)
-	log.Debugf("Detected encoding: %s\n", enc)
 	dec.reader = *csv.NewReader(cleanReader)
 	dec.reader.Comma = dec.separator
 	dec.finished = false
@@ -53,7 +52,6 @@ func (dec *csvObjectDecoder) Decode() (*CandidateNode, error) {
 		return nil, io.EOF
 	}
 	headerRow, err := dec.reader.Read()
-	log.Debugf(": headerRow%v", headerRow)
 	if err != nil {
 		return nil, err
 	}
@@ -63,10 +61,8 @@ func (dec *csvObjectDecoder) Decode() (*CandidateNode, error) {
 	contentRow, err := dec.reader.Read()
 
 	for err == nil && len(contentRow) > 0 {
-		log.Debugf("Adding contentRow: %v", contentRow)
 		rootArray.Content = append(rootArray.Content, dec.createObject(headerRow, contentRow))
 		contentRow, err = dec.reader.Read()
-		log.Debugf("Read next contentRow: %v, %v", contentRow, err)
 	}
 	if !errors.Is(err, io.EOF) {
 		return nil, err

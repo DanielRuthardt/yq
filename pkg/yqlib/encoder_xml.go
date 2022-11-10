@@ -104,9 +104,7 @@ func (e *xmlEncoder) encodeTopLevelMap(encoder *xml.Encoder, node *yaml.Node) er
 			if err := encoder.EncodeToken(procInst); err != nil {
 				return err
 			}
-			if _, err := e.writer.Write([]byte("\n")); err != nil {
-				log.Warning("Unable to write newline, skipping: %w", err)
-			}
+			e.writer.Write([]byte("\n"))
 		}
 	}
 
@@ -119,7 +117,6 @@ func (e *xmlEncoder) encodeTopLevelMap(encoder *xml.Encoder, node *yaml.Node) er
 		value := node.Content[i+1]
 
 		start := xml.StartElement{Name: xml.Name{Local: key.Value}}
-		log.Debugf("comments of key %v", key.Value)
 		err := e.encodeComment(encoder, headAndLineComment(key))
 		if err != nil {
 			return err
@@ -133,20 +130,14 @@ func (e *xmlEncoder) encodeTopLevelMap(encoder *xml.Encoder, node *yaml.Node) er
 			if err := encoder.EncodeToken(procInst); err != nil {
 				return err
 			}
-			if _, err := e.writer.Write([]byte("\n")); err != nil {
-				log.Warning("Unable to write newline, skipping: %w", err)
-			}
+			e.writer.Write([]byte("\n"))
 		} else if key.Value == e.prefs.DirectiveName {
 			var directive xml.Directive = []byte(value.Value)
 			if err := encoder.EncodeToken(directive); err != nil {
 				return err
 			}
-			if _, err := e.writer.Write([]byte("\n")); err != nil {
-				log.Warning("Unable to write newline, skipping: %w", err)
-			}
+			e.writer.Write([]byte("\n"))
 		} else {
-
-			log.Debugf("recursing")
 
 			err = e.doEncode(encoder, value, start)
 			if err != nil {
@@ -206,7 +197,6 @@ func (e *xmlEncoder) doEncode(encoder *xml.Encoder, node *yaml.Node, start xml.S
 
 func (e *xmlEncoder) encodeComment(encoder *xml.Encoder, commentStr string) error {
 	if commentStr != "" {
-		log.Debugf("encoding comment %v", commentStr)
 		if !strings.HasSuffix(commentStr, " ") {
 			commentStr = commentStr + " "
 		}
@@ -243,8 +233,6 @@ func (e *xmlEncoder) isAttribute(name string) bool {
 }
 
 func (e *xmlEncoder) encodeMap(encoder *xml.Encoder, node *yaml.Node, start xml.StartElement) error {
-	log.Debug("its a map")
-
 	//first find all the attributes and put them on the start token
 	for i := 0; i < len(node.Content); i += 2 {
 		key := node.Content[i]

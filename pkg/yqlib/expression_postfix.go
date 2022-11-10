@@ -3,8 +3,6 @@ package yqlib
 import (
 	"errors"
 	"fmt"
-
-	logging "gopkg.in/op/go-logging.v1"
 )
 
 type expressionPostFixer interface {
@@ -21,7 +19,6 @@ func newExpressionPostFixer() expressionPostFixer {
 func popOpToResult(opStack []*token, result []*Operation) ([]*token, []*Operation) {
 	var newOp *token
 	opStack, newOp = opStack[0:len(opStack)-1], opStack[len(opStack)-1]
-	log.Debugf("popped %v from opstack to results", newOp.toString(true))
 	return opStack, append(result, newOp.Operation)
 }
 
@@ -43,11 +40,9 @@ func (p *expressionPostFixerImpl) ConvertToPostfix(infixTokens []*token) ([]*Ope
 	var tokens = append(infixTokens, &token{TokenType: closeBracket})
 
 	for _, currentToken := range tokens {
-		log.Debugf("postfix processing currentToken %v", currentToken.toString(true))
 		switch currentToken.TokenType {
 		case openBracket, openCollect, openCollectObject:
 			opStack = append(opStack, currentToken)
-			log.Debugf("put %v onto the opstack", currentToken.toString(true))
 		case closeCollect, closeCollectObject:
 			var opener tokenType = openCollect
 			var collectOperator = collectOpType
@@ -68,7 +63,6 @@ func (p *expressionPostFixerImpl) ConvertToPostfix(infixTokens []*token) ([]*Ope
 			}
 			// now we should have [ as the last element on the opStack, get rid of it
 			opStack = opStack[0 : len(opStack)-1]
-			log.Debugf("deleting open bracket from opstack")
 
 			//and append a collect to the result
 
@@ -81,10 +75,8 @@ func (p *expressionPostFixerImpl) ConvertToPostfix(infixTokens []*token) ([]*Ope
 				prefs.OptionalTraverse = true
 			}
 			result = append(result, &Operation{OperationType: collectOperator})
-			log.Debugf("put collect onto the result")
 			if opener != openCollect {
 				result = append(result, &Operation{OperationType: shortPipeOpType})
-				log.Debugf("put shortpipe onto the result")
 			}
 
 			//traverseArrayCollect is a sneaky op that needs to be included too
@@ -119,25 +111,11 @@ func (p *expressionPostFixerImpl) ConvertToPostfix(infixTokens []*token) ([]*Ope
 			}
 			// add this operator to the opStack
 			opStack = append(opStack, currentToken)
-			log.Debugf("put %v onto the opstack", currentToken.toString(true))
 		}
 	}
 
-	log.Debugf("opstackLen: %v", len(opStack))
 	if len(opStack) > 0 {
-		log.Debugf("opstack:")
-		for _, token := range opStack {
-			log.Debugf("- %v", token.toString(true))
-		}
-
 		return nil, fmt.Errorf("bad expression - probably missing close bracket on %v", opStack[len(opStack)-1].toString(false))
-	}
-
-	if log.IsEnabledFor(logging.DEBUG) {
-		log.Debugf("PostFix Result:")
-		for _, currentToken := range result {
-			log.Debugf("> %v", currentToken.toString())
-		}
 	}
 
 	return result, nil

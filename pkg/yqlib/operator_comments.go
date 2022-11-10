@@ -17,7 +17,6 @@ type commentOpPreferences struct {
 
 func assignCommentsOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
 
-	log.Debugf("AssignComments operator!")
 
 	lhs, err := d.GetMatchingNodes(context, expressionNode.LHS)
 
@@ -53,7 +52,6 @@ func assignCommentsOperator(d *dataTreeNavigator, context Context, expressionNod
 			}
 		}
 
-		log.Debugf("Setting comment of : %v", candidate.GetKey())
 		if preferences.LineComment {
 			candidate.Node.LineComment = comment
 		}
@@ -80,7 +78,6 @@ func getCommentsOperator(d *dataTreeNavigator, context Context, expressionNode *
 	var startCommentCharaterRegExp = regexp.MustCompile(`^# `)
 	var subsequentCommentCharaterRegExp = regexp.MustCompile(`\n# `)
 
-	log.Debugf("GetComments operator!")
 	var results = list.New()
 
 	yamlPrefs := NewDefaultYamlPreferences()

@@ -16,7 +16,6 @@ func collectTogether(d *dataTreeNavigator, context Context, expressionNode *Expr
 		}
 		for result := collectExpResults.MatchingNodes.Front(); result != nil; result = result.Next() {
 			resultC := result.Value.(*CandidateNode)
-			log.Debugf("found this: %v", NodeToString(resultC))
 			collectedNode.Content = append(collectedNode.Content, unwrapDoc(resultC.Node))
 		}
 	}
@@ -24,7 +23,6 @@ func collectTogether(d *dataTreeNavigator, context Context, expressionNode *Expr
 }
 
 func collectOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("-- collectOperation")
 
 	if context.MatchingNodes.Len() == 0 {
 		node := &yaml.Node{Kind: yaml.SequenceNode, Tag: "!!seq", Value: "[]"}
@@ -63,7 +61,6 @@ func collectOperator(d *dataTreeNavigator, context Context, expressionNode *Expr
 
 		for result := collectExpResults.MatchingNodes.Front(); result != nil; result = result.Next() {
 			resultC := result.Value.(*CandidateNode)
-			log.Debugf("found this: %v", NodeToString(resultC))
 			collectedNode.Content = append(collectedNode.Content, unwrapDoc(resultC.Node))
 		}
 

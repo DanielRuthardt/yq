@@ -34,16 +34,13 @@ func (w *writeInPlaceHandlerImpl) CreateTempFile() (*os.File, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Debug("WriteInPlaceHandler: writing to tempfile: %v", file.Name())
 	w.tempFile = file
 	return file, err
 }
 
 func (w *writeInPlaceHandlerImpl) FinishWriteInPlace(evaluatedSuccessfully bool) error {
-	log.Debug("Going to write-inplace, evaluatedSuccessfully=%v, target=%v", evaluatedSuccessfully, w.inputFilename)
 	safelyCloseFile(w.tempFile)
 	if evaluatedSuccessfully {
-		log.Debug("Moving temp file to target")
 		return tryRenameFile(w.tempFile.Name(), w.inputFilename)
 	}
 	tryRemoveTempFile(w.tempFile.Name())

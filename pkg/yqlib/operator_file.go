@@ -8,7 +8,6 @@ import (
 )
 
 func getFilenameOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("GetFilename")
 
 	var results = list.New()
 
@@ -23,7 +22,6 @@ func getFilenameOperator(d *dataTreeNavigator, context Context, expressionNode *
 }
 
 func getFileIndexOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("GetFileIndex")
 
 	var results = list.New()
 

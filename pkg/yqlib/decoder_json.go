@@ -24,7 +24,6 @@ func (dec *jsonDecoder) Init(reader io.Reader) error {
 func (dec *jsonDecoder) Decode() (*CandidateNode, error) {
 
 	var dataBucket orderedMap
-	log.Debug("going to decode")
 	err := dec.decoder.Decode(&dataBucket)
 	if err != nil {
 		return nil, err

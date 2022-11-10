@@ -41,7 +41,6 @@ func toNodes(candidate *CandidateNode, lhs *CandidateNode) ([]*yaml.Node, error)
 }
 
 func addOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("Add operator")
 
 	return crossFunction(d, context.ReadOnlyClone(), expressionNode, add, false)
 }
@@ -190,9 +189,7 @@ func addMaps(target *CandidateNode, lhsC *CandidateNode, rhsC *CandidateNode) {
 	for index := 0; index < len(rhs.Content); index = index + 2 {
 		key := rhs.Content[index]
 		value := rhs.Content[index+1]
-		log.Debug("finding %v", key.Value)
 		indexInLHS := findKeyInMap(target.Node, key)
-		log.Debug("indexInLhs %v", indexInLHS)
 		if indexInLHS < 0 {
 			// not in there, append it
 			target.Node.Content = append(target.Node.Content, key, value)

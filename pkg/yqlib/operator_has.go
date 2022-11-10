@@ -9,7 +9,6 @@ import (
 
 func hasOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
 
-	log.Debugf("-- hasOperation")
 	var results = list.New()
 
 	rhs, err := d.GetMatchingNodes(context.ReadOnlyClone(), expressionNode.RHS)

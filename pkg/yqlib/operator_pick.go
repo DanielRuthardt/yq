@@ -48,7 +48,6 @@ func pickSequence(original *yaml.Node, indices *yaml.Node) (*yaml.Node, error) {
 }
 
 func pickOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("Pick")
 
 	contextIndicesToPick, err := d.GetMatchingNodes(context, expressionNode.RHS)
 

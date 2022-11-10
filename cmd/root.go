@@ -1,18 +1,15 @@
 package cmd
 
 import (
-	"os"
-
 	"github.com/mikefarah/yq/v4/pkg/yqlib"
 	"github.com/spf13/cobra"
-	logging "gopkg.in/op/go-logging.v1"
 )
 
 func New() *cobra.Command {
 	var rootCmd = &cobra.Command{
 		Use:   "yq",
 		Short: "yq is a lightweight and portable command-line YAML processor.",
-		Long: `yq is a portable command-line YAML processor (https://github.com/mikefarah/yq/) 
+		Long: `yq is a portable command-line YAML processor (https://github.com/mikefarah/yq/)
 See https://mikefarah.gitbook.io/yq/ for detailed documentation and examples.`,
 		Example: `
 # yq defaults to 'eval' command if no command is specified. See "yq eval --help" for more examples.
@@ -38,19 +35,6 @@ yq -P sample.json
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 			cmd.SetOut(cmd.OutOrStdout())
 
-			var format = logging.MustStringFormatter(
-				`%{color}%{time:15:04:05} %{shortfunc} [%{level:.4s}]%{color:reset} %{message}`,
-			)
-			var backend = logging.AddModuleLevel(
-				logging.NewBackendFormatter(logging.NewLogBackend(os.Stderr, "", 0), format))
-
-			if verbose {
-				backend.SetLevel(logging.DEBUG, "")
-			} else {
-				backend.SetLevel(logging.WARNING, "")
-			}
-
-			logging.SetBackend(backend)
 			yqlib.InitExpressionParser()
 
 			outputFormatType, err := yqlib.OutputFormatFromString(outputFormat)
@@ -63,16 +47,6 @@ yq -P sample.json
 
 			if err != nil {
 				return err
-			}
-
-			if (inputFormatType == yqlib.XMLInputFormat &&
-				outputFormatType != yqlib.XMLOutputFormat ||
-				inputFormatType != yqlib.XMLInputFormat &&
-					outputFormatType == yqlib.XMLOutputFormat) &&
-				yqlib.ConfiguredXMLPreferences.AttributePrefix == "+@" {
-				yqlib.GetLogger().Warning("The default xml-attribute-prefix has changed in the v4.30 to `+@` to avoid " +
-					"naming conflicts with the default content name, directive name and proc inst prefix. If you need to keep " +
-					"`+` please set that value explicityly with --xml-attribute-prefix.")
 			}
 
 			if outputFormatType == yqlib.YamlOutputFormat ||

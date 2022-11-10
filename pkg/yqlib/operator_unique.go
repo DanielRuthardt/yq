@@ -17,7 +17,6 @@ func unique(d *dataTreeNavigator, context Context, expressionNode *ExpressionNod
 
 func uniqueBy(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
 
-	log.Debugf("-- uniqueBy Operator")
 	var results = list.New()
 
 	for el := context.MatchingNodes.Front(); el != nil; el = el.Next() {

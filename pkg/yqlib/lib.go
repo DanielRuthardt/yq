@@ -9,7 +9,6 @@ import (
 	"strconv"
 	"strings"
 
-	logging "gopkg.in/op/go-logging.v1"
 	yaml "gopkg.in/yaml.v3"
 )
 
@@ -21,14 +20,7 @@ func InitExpressionParser() {
 	}
 }
 
-var log = logging.MustGetLogger("yq-lib")
-
 var PrettyPrintExp = `(... | (select(tag != "!!str"), select(tag == "!!str") | select(test("(?i)^(y|yes|n|no|on|off)$") | not))  ) style=""`
-
-// GetLogger returns the yq logger instance.
-func GetLogger() *logging.Logger {
-	return log
-}
 
 type operationType struct {
 	Type       string
@@ -235,17 +227,14 @@ func guessTagFromCustomType(node *yaml.Node) string {
 	if strings.HasPrefix(node.Tag, "!!") {
 		return node.Tag
 	} else if node.Value == "" {
-		log.Warning("node has no value to guess the type with")
 		return node.Tag
 	}
 	dataBucket, errorReading := parseSnippet(node.Value)
 
 	if errorReading != nil {
-		log.Warning("could not guess underlying tag type %v", errorReading)
 		return node.Tag
 	}
 	guessedTag := unwrapDoc(dataBucket).Tag
-	log.Info("im guessing the tag %v is a %v", node.Tag, guessedTag)
 	return guessedTag
 }
 
@@ -445,6 +434,7 @@ func NodesToString(collection *list.List) string {
 		return ""
 	}
 
+	return ""
 	result := fmt.Sprintf("%v results\n", collection.Len())
 	for el := collection.Front(); el != nil; el = el.Next() {
 		result = result + "\n" + NodeToString(el.Value.(*CandidateNode))
@@ -453,23 +443,15 @@ func NodesToString(collection *list.List) string {
 }
 
 func NodeToString(node *CandidateNode) string {
-	if !log.IsEnabledFor(logging.DEBUG) {
-		return ""
-	}
+	return ""
 	value := node.Node
 	if value == nil {
 		return "-- nil --"
 	}
 	buf := new(bytes.Buffer)
 	encoder := yaml.NewEncoder(buf)
-	errorEncoding := encoder.Encode(value)
-	if errorEncoding != nil {
-		log.Error("Error debugging node, %v", errorEncoding.Error())
-	}
-	errorClosingEncoder := encoder.Close()
-	if errorClosingEncoder != nil {
-		log.Error("Error closing encoder: ", errorClosingEncoder.Error())
-	}
+	encoder.Encode(value)
+	encoder.Close()
 	tag := value.Tag
 	if value.Kind == yaml.DocumentNode {
 		tag = "doc"

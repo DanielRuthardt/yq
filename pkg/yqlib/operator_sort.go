@@ -47,7 +47,6 @@ func sortByOperator(d *dataTreeNavigator, context Context, expressionNode *Expre
 				nodeToCompare = compareContext.MatchingNodes.Front().Value.(*CandidateNode).Node
 			}
 
-			log.Debug("going to compare %v by %v", NodeToString(candidate.CreateReplacement(originalNode)), NodeToString(candidate.CreateReplacement(nodeToCompare)))
 
 			sortableArray[i] = sortableNode{Node: originalNode, NodeToCompare: nodeToCompare, dateTimeLayout: context.GetDateTimeLayout()}
 
@@ -130,12 +129,10 @@ func (a sortableNodeArray) Less(i, j int) bool {
 	} else if isDateTime {
 		lhsTime, err := parseDateTime(layout, lhs.Value)
 		if err != nil {
-			log.Warningf("Could not parse time %v with layout %v for sort, sorting by string instead: %w", lhs.Value, layout, err)
 			return strings.Compare(lhs.Value, rhs.Value) < 0
 		}
 		rhsTime, err := parseDateTime(layout, rhs.Value)
 		if err != nil {
-			log.Warningf("Could not parse time %v with layout %v for sort, sorting by string instead: %w", rhs.Value, layout, err)
 			return strings.Compare(lhs.Value, rhs.Value) < 0
 		}
 		return lhsTime.Before(rhsTime)

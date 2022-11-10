@@ -32,7 +32,6 @@ func configureEncoder(format PrinterOutputFormat, indent int) Encoder {
 
 func encodeToString(candidate *CandidateNode, prefs encoderPreferences) (string, error) {
 	var output bytes.Buffer
-	log.Debug("printing with indent: %v", prefs.indent)
 
 	encoder := configureEncoder(prefs.format, prefs.indent)
 
@@ -121,7 +120,6 @@ func decodeOperator(d *dataTreeNavigator, context Context, expressionNode *Expre
 
 		context.SetVariable("decoded: "+candidate.GetKey(), candidate.AsList())
 
-		log.Debugf("got: [%v]", candidate.Node.Value)
 
 		err := decoder.Init(strings.NewReader(unwrapDoc(candidate.Node).Value))
 		if err != nil {

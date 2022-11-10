@@ -55,7 +55,6 @@ func loadYaml(filename string, decoder Decoder) (*CandidateNode, error) {
 }
 
 func loadYamlOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("loadYamlOperator")
 
 	loadPrefs := expressionNode.Operation.Preferences.(loadPrefs)
 

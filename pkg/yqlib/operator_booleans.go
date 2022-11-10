@@ -158,12 +158,10 @@ func andOperator(d *dataTreeNavigator, context Context, expressionNode *Expressi
 }
 
 func notOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("-- notOperation")
 	var results = list.New()
 
 	for el := context.MatchingNodes.Front(); el != nil; el = el.Next() {
 		candidate := el.Value.(*CandidateNode)
-		log.Debug("notOperation checking %v", candidate)
 		truthy, errDecoding := isTruthy(candidate)
 		if errDecoding != nil {
 			return Context{}, errDecoding

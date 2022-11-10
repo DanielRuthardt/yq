@@ -42,7 +42,6 @@ func getPathArrayFromNode(funcName string, node *yaml.Node) ([]interface{}, erro
 
 // SETPATH(pathArray; value)
 func setPathOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("SetPath")
 
 	if expressionNode.RHS.Operation.OperationType != blockOpType {
 		return Context{}, fmt.Errorf("SETPATH must be given a block (;), got %v instead", expressionNode.RHS.Operation.OperationType.Type)
@@ -100,7 +99,6 @@ func setPathOperator(d *dataTreeNavigator, context Context, expressionNode *Expr
 }
 
 func delPathsOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("delPaths")
 	// single RHS expression that returns an array of paths (array of arrays)
 
 	pathArraysContext, err := d.GetMatchingNodes(context.ReadOnlyClone(), expressionNode.RHS)
@@ -150,7 +148,6 @@ func delPathsOperator(d *dataTreeNavigator, context Context, expressionNode *Exp
 }
 
 func getPathOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("GetPath")
 
 	var results = list.New()
 

@@ -29,7 +29,6 @@ func recursiveDecent(results *list.List, context Context, preferences recursiveD
 
 		candidate.Node = unwrapDoc(candidate.Node)
 
-		log.Debugf("Recursive Decent, added %v", NodeToString(candidate))
 		results.PushBack(candidate)
 
 		if candidate.Node.Kind != yaml.AliasNode && len(candidate.Node.Content) > 0 &&

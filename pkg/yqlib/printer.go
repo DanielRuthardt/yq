@@ -83,10 +83,8 @@ func (p *resultsPrinter) printNode(node *yaml.Node, writer io.Writer) error {
 }
 
 func (p *resultsPrinter) PrintResults(matchingNodes *list.List) error {
-	log.Debug("PrintResults for %v matches", matchingNodes.Len())
 
 	if matchingNodes.Len() == 0 {
-		log.Debug("no matching results, nothing to print")
 		return nil
 	}
 
@@ -110,8 +108,6 @@ func (p *resultsPrinter) PrintResults(matchingNodes *list.List) error {
 	for el := matchingNodes.Front(); el != nil; el = el.Next() {
 
 		mappedDoc := el.Value.(*CandidateNode)
-		log.Debug("-- print sep logic: p.firstTimePrinting: %v, previousDocIndex: %v, mappedDoc.Document: %v", p.firstTimePrinting, p.previousDocIndex, mappedDoc.Document)
-		log.Debug("%v", NodeToString(mappedDoc))
 		writer, errorWriting := p.printerWriter.GetWriter(mappedDoc)
 		if errorWriting != nil {
 			return errorWriting
@@ -142,7 +138,6 @@ func (p *resultsPrinter) PrintResults(matchingNodes *list.List) error {
 		if err := writer.Flush(); err != nil {
 			return err
 		}
-		log.Debugf("done printing results")
 	}
 
 	// what happens if I remove output format check?
@@ -152,7 +147,6 @@ func (p *resultsPrinter) PrintResults(matchingNodes *list.List) error {
 			return err
 		}
 
-		log.Debug("Piping appendix reader...")
 		betterReader := bufio.NewReader(p.appendixReader)
 		_, err = io.Copy(writer, betterReader)
 		if err != nil {

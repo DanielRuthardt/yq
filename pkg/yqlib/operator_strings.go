@@ -72,7 +72,6 @@ func getSubstituteParameters(d *dataTreeNavigator, block *ExpressionNode, contex
 		regEx = regExNodes.MatchingNodes.Front().Value.(*CandidateNode).Node.Value
 	}
 
-	log.Debug("regEx %v", regEx)
 
 	replacementNodes, err := d.GetMatchingNodes(context, block.RHS)
 	if err != nil {
@@ -173,7 +172,6 @@ func getMatches(matchPrefs matchPreferences, regEx *regexp.Regexp, value string)
 		allIndices = [][]int{regEx.FindStringSubmatchIndex(value)}
 	}
 
-	log.Debug("allMatches, %v", allMatches)
 	return allMatches, allIndices
 }
 
@@ -278,12 +276,10 @@ func extractMatchArguments(d *dataTreeNavigator, context Context, expressionNode
 	if err != nil {
 		return nil, matchPrefs, err
 	}
-	log.Debug(NodesToString(regExNodes.MatchingNodes))
 	regExStr := ""
 	if regExNodes.MatchingNodes.Front() != nil {
 		regExStr = regExNodes.MatchingNodes.Front().Value.(*CandidateNode).Node.Value
 	}
-	log.Debug("regEx %v", regExStr)
 	regEx, err := regexp.Compile(regExStr)
 	return regEx, matchPrefs, err
 }
@@ -356,7 +352,6 @@ func testOperator(d *dataTreeNavigator, context Context, expressionNode *Express
 }
 
 func joinStringOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("-- joinStringOperator")
 	joinStr := ""
 
 	rhs, err := d.GetMatchingNodes(context.ReadOnlyClone(), expressionNode.RHS)
@@ -397,7 +392,6 @@ func join(content []*yaml.Node, joinStr string) *yaml.Node {
 }
 
 func splitStringOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("-- splitStringOperator")
 	splitStr := ""
 
 	rhs, err := d.GetMatchingNodes(context.ReadOnlyClone(), expressionNode.RHS)

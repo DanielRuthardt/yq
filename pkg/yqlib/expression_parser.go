@@ -25,7 +25,6 @@ func newExpressionParser() ExpressionParserInterface {
 }
 
 func (p *expressionParserImpl) ParseExpression(expression string) (*ExpressionNode, error) {
-	log.Debug("Parsing expression: [%v]", expression)
 	tokens, err := p.pathTokeniser.Tokenise(expression)
 	if err != nil {
 		return nil, err
@@ -47,7 +46,6 @@ func (p *expressionParserImpl) createExpressionTree(postFixPath []*Operation) (*
 
 	for _, Operation := range postFixPath {
 		var newNode = ExpressionNode{Operation: Operation}
-		log.Debugf("pathTree %v ", Operation.toString())
 		if Operation.OperationType.NumArgs > 0 {
 			numArgs := Operation.OperationType.NumArgs
 			if numArgs == 1 {

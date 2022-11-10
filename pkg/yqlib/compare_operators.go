@@ -14,22 +14,18 @@ type compareTypePref struct {
 }
 
 func compareOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("-- compareOperator")
 	prefs := expressionNode.Operation.Preferences.(compareTypePref)
 	return crossFunction(d, context.ReadOnlyClone(), expressionNode, compare(prefs), true)
 }
 
 func compare(prefs compareTypePref) func(d *dataTreeNavigator, context Context, lhs *CandidateNode, rhs *CandidateNode) (*CandidateNode, error) {
 	return func(d *dataTreeNavigator, context Context, lhs *CandidateNode, rhs *CandidateNode) (*CandidateNode, error) {
-		log.Debugf("-- compare cross function")
 		if lhs == nil && rhs == nil {
 			owner := &CandidateNode{}
 			return createBooleanCandidate(owner, prefs.OrEqual), nil
 		} else if lhs == nil {
-			log.Debugf("lhs nil, but rhs is not")
 			return createBooleanCandidate(rhs, false), nil
 		} else if rhs == nil {
-			log.Debugf("rhs nil, but rhs is not")
 			return createBooleanCandidate(lhs, false), nil
 		}
 

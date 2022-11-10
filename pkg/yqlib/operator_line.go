@@ -8,7 +8,6 @@ import (
 )
 
 func lineOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
-	log.Debugf("lineOperator")
 
 	var results = list.New()
 

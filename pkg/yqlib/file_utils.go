@@ -8,9 +8,6 @@ import (
 
 func tryRenameFile(from string, to string) error {
 	if renameError := os.Rename(from, to); renameError != nil {
-		log.Debugf("Error renaming from %v to %v, attempting to copy contents", from, to)
-		log.Debug(renameError.Error())
-		log.Debug("going to try copying instead")
 		// can't do this rename when running in docker to a file targeted in a mounted volume,
 		// so gracefully degrade to copying the entire contents.
 		if copyError := copyFileContents(from, to); copyError != nil {
@@ -22,11 +19,7 @@ func tryRenameFile(from string, to string) error {
 }
 
 func tryRemoveTempFile(filename string) {
-	log.Debug("Removing temp file: %v", filename)
-	removeErr := os.Remove(filename)
-	if removeErr != nil {
-		log.Errorf("Failed to remove temp file: %v", filename)
-	}
+	os.Remove(filename)
 }
 
 // thanks https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
@@ -58,11 +51,7 @@ func SafelyCloseReader(reader io.Reader) {
 }
 
 func safelyCloseFile(file *os.File) {
-	err := file.Close()
-	if err != nil {
-		log.Error("Error closing file!")
-		log.Error(err.Error())
-	}
+	file.Close()
 }
 
 func createTempFile() (*os.File, error) {
